@@ -21,4 +21,9 @@ public class PaymentSchedule
     /// Total remaining amount
     /// </summary>
     public decimal RemainingBalance { get; set; }
+
+    /// <summary>
+    /// Number of payment
+    /// </summary>
+    public int PaymentFrequencyNumber { get; set; }
 }
