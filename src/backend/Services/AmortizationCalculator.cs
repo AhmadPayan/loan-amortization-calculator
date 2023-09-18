@@ -10,6 +10,8 @@ public class AmortizationCalculator : IAmortizationCalculator
     {
         if (loan is null) throw new NullReferenceException($"Parameter {nameof(loan)} cannot be NULL");
         
+        if (loan.LoanAmount <=0) throw new NullReferenceException($"Invalid loan amount! The loan amount cannot be less than or equal to 0");
+        
         return null;
     }
 }
