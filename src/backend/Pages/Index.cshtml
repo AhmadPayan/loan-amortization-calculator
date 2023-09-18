@@ -1,0 +1,167 @@
+﻿@page
+@model backend.Pages.IndexModel
+
+<style>
+      body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            display: block;
+            width: 190px;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .form-control:focus {
+            border-color: #007bff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #00CED1;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #e0e0e0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+</style>
+
+<div class="container">
+    <h1>Amortization Schedule Calculator</h1>
+    <form method="post" class="mb-4">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.LabelFor(x => x.Loan.LoanAmount, new {@class = "control-label"})
+            @Html.TextBoxFor(x => x.Loan.LoanAmount, new {@class = "form-control", @placeholder = "e.g. 1000", @required = "required"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Loan.InterestRate, new {@class = "control-label"})
+            @Html.TextBoxFor(x => x.Loan.InterestRate, new {@class = "form-control", @placeholder = "Interest Rate %", @required = "required"})
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Loan.NumberOfPayments, new {@class = "control-label"})
+            @Html.TextBoxFor(x => x.Loan.NumberOfPayments, new {@class = "form-control", @placeholder = "Number of Payments", @required = "required"})
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Loan.PaymentFrequency, new {@class = "control-label"})
+            @Html.DropDownListFor(x => x.Loan.PaymentFrequency,
+                (IEnumerable<SelectListItem>) ViewData["PaymentFrequencyData"]
+                , "", new {@class = "form-control", @required = "required"})
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-control">Calculate</button>
+        </div>
+        
+    </form>
+
+    @if (Model.AmortizationSchedule != null && Model.AmortizationSchedule.Any())
+    {
+        <h2 class="text-center">Amortization Schedule</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-left">Payment Number</th>
+                    <th class="text-left">Principal Amount</th>
+                    <th class="text-left">Interest Amount</th>
+                    <th class="text-left">Total Payment</th>
+                    <th class="text-left">Remaining Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var payment in Model.AmortizationSchedule)
+                {
+                    <tr>
+                        <td class="text-left">@payment.PaymentFrequencyNumber</td>
+                        <td class="text-left">@payment.PrincipalAmount.ToString("C")</td>
+                        <td class="text-left">@payment.InterestAmount.ToString("C")</td>
+                        <td class="text-left">@payment.PaymentAmount.ToString("C")</td>
+                        <td class="text-left">@payment.RemainingBalance.ToString("C")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<p class="text-center">
+    AhmadReza Payan | <a target="_blank" href="https://www.linkedin.com/in/ahmadpayan">LinkedIn</a>
+</p>
